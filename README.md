@@ -55,7 +55,7 @@ This POC addresses all these issues with a clean, production-ready architecture.
 │    │            ├──► Vector Search                            │
 │    │            └──► RRF Fusion                               │
 │    │                                                         │
-│    └──► internet_search tool                                 │
+│    └──► web_search tool                                       │
 │          └──► Tavily / DuckDuckGo                           │
 │                                                              │
 │  Agent synthesizes answer from evidence + adds citations     │
@@ -97,7 +97,7 @@ agentic-rag-poc/
 │       ├── tools/              # LangChain tools
 │       │   ├── __init__.py
 │       │   ├── document_search.py
-│       │   └── internet_search.py
+│       │   └── web_search.py
 │       └── prompts/            # Agent prompts
 │           └── agent_prompt.txt
 │
@@ -118,7 +118,7 @@ agentic-rag-poc/
 
 - **Python 3.10+**
 - **OpenAI API key** (required)
-- **Tavily API key** (optional, for better internet search)
+- **Tavily API key** (optional, for better web search)
 - **Poppler** (for OCR): 
   - macOS: `brew install poppler`
   - Linux: `apt-get install poppler-utils`
@@ -146,7 +146,7 @@ agentic-rag-poc/
    ```bash
    cp .env.example .env
    # Edit .env and add your OPENAI_API_KEY
-   # Optionally add TAVILY_API_KEY for better internet search
+   # Optionally add TAVILY_API_KEY for better web search
    ```
 
 ## 📖 Usage Guide
@@ -291,7 +291,7 @@ Expected: BM25 finds HD-7961, vector finds coverage context, RRF fuses results
 
 ```
 Query: "What is BM25?"
-Expected: document_search returns low confidence, agent calls internet_search
+Expected: document_search returns low confidence, agent calls web_search
 ```
 
 ## 🛠️ API Reference
@@ -361,7 +361,7 @@ Content-Type: application/json
 1. **Agent receives query**
 2. **Routing decision** (from prompt):
    - Identifier pattern or document intent → `document_search` first
-   - General knowledge → `internet_search`
+   - General knowledge → `web_search`
 3. **Document Search**:
    - Load artifacts (lazy singleton)
    - Run BM25 search (top K)
@@ -369,7 +369,7 @@ Content-Type: application/json
    - Boost BM25 if identifier detected
    - Fuse with RRF (k=60)
    - Return evidence with confidence
-4. **Internet Search** (if needed):
+4. **Web Search** (if needed):
    - Use Tavily if API key available
    - Otherwise DuckDuckGo
    - Return snippets + URLs
@@ -489,14 +489,3 @@ Each test prints:
 ## 📄 License
 
 This is a proof-of-concept for evaluation purposes.
-
-## 👤 Author Notes
-
-This POC demonstrates:
-- **Production-ready code structure**: Clean separation, proper error handling, logging
-- **Deep retrieval understanding**: BM25, vector, and hybrid fusion
-- **Agentic orchestration**: Proper tool boundaries, evidence-based synthesis
-- **OCR awareness**: Handling real-world document formats
-- **Deterministic behavior**: Reliable identifier lookup
-
-The architecture is designed to be extended, not just demonstrated. Each component can be swapped (e.g., different embedding models, fusion strategies) without breaking the system.

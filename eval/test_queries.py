@@ -12,7 +12,7 @@ from langchain.agents.factory import create_agent
 from langchain_core.messages import HumanMessage
 
 from app.core.tools.document_search import document_search
-from app.core.tools.internet_search import internet_search
+from app.core.tools.web_search import web_search
 
 load_dotenv()
 
@@ -55,7 +55,7 @@ def create_agent():
         raise ValueError("OPENAI_API_KEY not found")
     
     llm = ChatOpenAI(model="gpt-4o-mini", temperature=0, api_key=api_key)
-    tools = [document_search, internet_search]
+    tools = [document_search, web_search]
     
     system_prompt = load_agent_prompt()
     

@@ -34,7 +34,7 @@ if "agent" not in st.session_state:
 st.title("🤖 Agentic RAG Chat")
 st.markdown("""
 Ask questions about the ingested documents or general knowledge.
-The agent will search documents and the internet to provide grounded answers with citations.
+The agent will search documents and the web to provide grounded answers with citations.
 """)
 
 with st.sidebar:
@@ -163,7 +163,7 @@ if prompt := st.chat_input("Ask a question..."):
                 if "p." in response or "page" in response.lower():
                     tools_used.append({"name": "document_search", "args": {"query": prompt}})
                 if "http" in response.lower() or "source:" in response.lower():
-                    tools_used.append({"name": "internet_search", "args": {"query": prompt}})
+                    tools_used.append({"name": "web_search", "args": {"query": prompt}})
                 
                 st.session_state.messages.append({
                     "role": "assistant",

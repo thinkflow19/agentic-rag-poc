@@ -1,4 +1,4 @@
-"""Internet search tool for LangChain agent."""
+"""Web search tool for LangChain agent."""
 
 import logging
 import os
@@ -43,7 +43,7 @@ def clear_search_cache():
 
 def _get_search_tool():
     """
-    Get internet search tool (Tavily if available, else DuckDuckGo) - thread-safe.
+    Get web search tool (Tavily if available, else DuckDuckGo) - thread-safe.
     Uses lazy loading and singleton pattern with double-check locking.
     
     Returns:
@@ -56,21 +56,21 @@ def _get_search_tool():
             if _search_tool is None:
                 tavily_api_key = os.getenv("TAVILY_API_KEY")
                 if tavily_api_key and TAVILY_AVAILABLE and TAVILY_CLASS:
-                    logger.info("Using Tavily for internet search")
+                    logger.info("Using Tavily for web search")
                     if TAVILY_CLASS.__name__ == "TavilySearch":
                         _search_tool = TAVILY_CLASS(max_results=5, api_key=tavily_api_key)
                     else:
                         _search_tool = TAVILY_CLASS(max_results=5, api_key=tavily_api_key)
                 else:
-                    logger.info("Using DuckDuckGo for internet search (Tavily API key not found or package not available)")
+                    logger.info("Using DuckDuckGo for web search (Tavily API key not found or package not available)")
                     _search_tool = DuckDuckGoSearchRun()
     return _search_tool
 
 
 @tool
-def internet_search(query: str) -> Dict[str, Any]:
+def web_search(query: str) -> Dict[str, Any]:
     """
-    Search the internet for information.
+    Search the web for information.
     Returns evidence snippets and URLs, not final answers.
     
     Use this tool when:
@@ -135,7 +135,7 @@ def internet_search(query: str) -> Dict[str, Any]:
         }
         
     except Exception as e:
-        logger.error(f"Internet search failed: {e}", exc_info=True)
+        logger.error(f"Web search failed: {e}", exc_info=True)
         return {
             "results": [],
             "source": "error"
