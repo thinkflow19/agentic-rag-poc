@@ -1,0 +1,16 @@
+langchain==1.1.*
+langchain-community
+langchain-openai
+langchain-tavily
+unstructured
+unstructured[pdf]
+faiss-cpu
+rank-bm25
+sentence-transformers
+tiktoken
+python-dotenv
+requests
+pypdf
+ddgs
+streamlit
+flask>=3.0.0
